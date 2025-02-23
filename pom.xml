@@ -28,6 +28,7 @@
     <modules>
         <module>auth-service</module>
         <module>discovery</module>
+        <module>gateway</module>
     </modules>
 
     <dependencyManagement>

@@ -21,3 +21,15 @@ services:
     restart: always
     depends_on:
       - discovery
+
+  gateway:
+    image: store/gateway:0.0.1-SNAPSHOT
+    ports:
+      - "9090:9090"
+    environment:
+      - CONFIG_URI=http://discovery:8761
+      - EUREKA_URI=http://discovery:8761/eureka
+    restart: always
+    depends_on:
+      - discovery
+      - auth-service
