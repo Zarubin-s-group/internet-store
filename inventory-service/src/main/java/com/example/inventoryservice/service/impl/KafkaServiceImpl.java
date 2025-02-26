@@ -1,0 +1,45 @@
+package com.example.inventoryservice.service.impl;
+
+import com.example.inventoryservice.dto.DeliveryKafkaDto;
+import com.example.inventoryservice.dto.ErrorKafkaDto;
+import com.example.inventoryservice.service.KafkaService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.stereotype.Service;
+
+@Service
+public class KafkaServiceImpl implements KafkaService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(KafkaServiceImpl.class);
+
+    @Value("${spring.kafka.delivery-service-topic}")
+    private String kafkaDeliveryServiceTopic;
+
+    @Value("${spring.kafka.order-service-topic}")
+    private String kafkaOrderServiceTopic;
+
+    @Value("${spring.kafka.error-payment-service-topic}")
+    private String kafkaErrorPaymentServiceTopic;
+
+    private final KafkaTemplate<String, Object> kafkaTemplate;
+
+    @Autowired
+    public KafkaServiceImpl(KafkaTemplate<String, Object> kafkaTemplate) {
+        this.kafkaTemplate = kafkaTemplate;
+    }
+
+    @Override
+    public void produce(Object kafkaDto) {
+        if (kafkaDto instanceof DeliveryKafkaDto) {
+            kafkaTemplate.send(kafkaDeliveryServiceTopic, kafkaDto);
+        } else if (kafkaDto instanceof ErrorKafkaDto) {
+            kafkaTemplate.send(kafkaErrorPaymentServiceTopic, kafkaDto);
+        } else {
+            kafkaTemplate.send(kafkaOrderServiceTopic, kafkaDto);
+        }
+        LOGGER.info("Sent message to Kafka -> '{}'", kafkaDto);
+    }
+}

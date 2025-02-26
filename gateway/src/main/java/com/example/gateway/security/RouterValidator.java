@@ -13,7 +13,10 @@ public class RouterValidator {
             Pattern.compile("/auth-service/auth/login"),
             Pattern.compile("/auth-service/v3/api-docs.*"),
             Pattern.compile("/order-service/v3/api-docs.*"),
-            Pattern.compile("/payment-service/v3/api-docs.*")
+            Pattern.compile("/payment-service/v3/api-docs.*"),
+            Pattern.compile("/inventory-service/category/view.*"),
+            Pattern.compile("/inventory-service/product/view.*"),
+            Pattern.compile("/inventory-service/v3/api-docs.*")
     );
 
     public static final Predicate<ServerHttpRequest> isSecured =
