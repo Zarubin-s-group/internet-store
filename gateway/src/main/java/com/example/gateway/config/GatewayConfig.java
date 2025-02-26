@@ -31,6 +31,11 @@ public class GatewayConfig {
                                 .filters(f -> f.filter(filter))
                                 .uri("lb://PAYMENT-SERVICE")
                 )
+                .route(
+                        "inventory_route", r -> r.path("/inventory-service/**")
+                                .filters(f -> f.filter(filter))
+                                .uri("lb://INVENTORY-SERVICE")
+                )
                 .build();
     }
 }
