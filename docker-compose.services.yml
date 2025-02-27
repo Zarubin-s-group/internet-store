@@ -67,6 +67,21 @@ services:
     depends_on:
       - discovery
 
+  delivery-service:
+    image: store/delivery-service:0.0.1-SNAPSHOT
+    ports:
+      - "8084:8084"
+    environment:
+      - CONFIG_URI=http://discovery:8761
+      - EUREKA_URI=http://discovery:8761/eureka
+      - DATABASE_URL=jdbc:postgresql://psql:5432/delivery_db
+      - DATABASE_USER=postgre_user
+      - DATABASE_PASSWORD=postgre_secret_password
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+    restart: always
+    depends_on:
+      - discovery
+
   gateway:
     image: store/gateway:0.0.1-SNAPSHOT
     ports:
@@ -81,3 +96,4 @@ services:
       - order-service
       - payment-service
       - inventory-service
+      - delivery-service
